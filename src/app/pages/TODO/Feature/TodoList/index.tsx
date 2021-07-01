@@ -21,7 +21,9 @@ export function TodoList() {
     <Wrapper>
       {isShowTodoList && <Button onClick={handleRestTodo}>Reset</Button>}
       {isShowTodoList &&
-        todoList.map(todoItem => <TodoItem todoItem={todoItem} />)}
+        todoList.map(todoItem => (
+          <TodoItem key={todoItem.id} todoItem={todoItem} />
+        ))}
     </Wrapper>
   );
 }

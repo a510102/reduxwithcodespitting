@@ -24,6 +24,13 @@ export function TodoItem(props: Props) {
     dispatch(actions.deleteTodo(todoItemId));
   };
 
+  const handleEditTodo = (todoItemId: number) => {
+    if (editValue) {
+      dispatch(actions.updateTodo({ id: todoItemId, content: editValue }));
+      setIsEdit(false);
+    }
+  };
+
   return (
     <ListItem key={todoItem.id}>
       {isEdit ? (
@@ -36,8 +43,14 @@ export function TodoItem(props: Props) {
           {todoItem.content}
         </ItemContent>
       )}
-      <ItemButtons>
-        <Button>Edit</Button>
+      <ItemButtons isEdit={isEdit}>
+        <Button
+          onClick={() => {
+            handleEditTodo(todoItem.id);
+          }}
+        >
+          Edit
+        </Button>
         {isEdit && <Button onClick={() => setIsEdit(false)}>Cancel</Button>}
         <Button onClick={() => handleDeleteTodo(todoItem.id)}>Delete</Button>
       </ItemButtons>
@@ -51,8 +64,12 @@ const ItemContent = styled.p`
   flex: 1;
 `;
 
-const ItemButtons = styled.div`
-  width: 40%;
+interface ItemButtonsProps {
+  isEdit: boolean;
+}
+
+const ItemButtons = styled.div<ItemButtonsProps>`
+  width: ${props => (props.isEdit ? '50%' : '30%')};
   padding: 4px;
   display: flex;
   justify-content: space-around;

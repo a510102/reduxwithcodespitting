@@ -11,6 +11,11 @@ export const initialState: TodoPageState = {
   error: '',
 };
 
+type updateTodo = {
+  id: number;
+  content: string;
+};
+
 const slice = createSlice({
   name: 'todoList',
   initialState,
@@ -23,8 +28,16 @@ const slice = createSlice({
       };
       state.todoList = [newTodo, ...state.todoList];
     },
-    updateTodo: (state, action) => {
-      console.log(action);
+    updateTodo: (state, { payload }: PayloadAction<updateTodo>) => {
+      const { id, content } = payload;
+      const updateTodoIndex = state.todoList.findIndex(
+        todoItem => todoItem.id === id,
+      );
+      console.log(updateTodoIndex);
+      let updateTodo = state.todoList.filter(todoItem => todoItem.id === id)[0];
+      updateTodo = { ...updateTodo, content };
+      const newTodoList = state.todoList.splice(updateTodoIndex, 1, updateTodo);
+      console.log(newTodoList);
     },
     deleteTodo: (state, { payload: id }: PayloadAction<number>) => {
       state.todoList = state.todoList.filter(todoItem => todoItem.id !== id);
